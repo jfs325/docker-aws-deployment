@@ -50,12 +50,13 @@ Before you begin, ensure you have the following:
 
     Mine looks something like this:
 
-    aws_access_key = "enter-access-key-here"
-    aws_secret_key = "enter-secret-key-here"
+    `aws_access_key = "enter-access-key-here"`
 
-4. **Create an ECR docker repo in AWS console**
+    `aws_secret_key = "enter-secret-key-here"`
+
+4. **Create an ECR docker repository in AWS console**
     
-    This is the one creation part I do manually, because pushing your local docker file to ECR cannot be easily automated here.
+    This is the one creation part I do manually, because pushing your local docker image to ECR cannot be easily automated here.
 
     To do this, go to ECR in the [AWS Console](https://aws.amazon.com/console/), and click on "Create repo"
 
@@ -72,11 +73,13 @@ Before you begin, ensure you have the following:
 
      ![alt text](./images/push-commands.png)
 
-    And run the following commands in your local repo. I added the keyword --platform=linux/amd64 when building the docker image just to be safe with architecture types.
+    And run the following commands in your local repo. I added the keyword --platform=linux/amd64 when building the docker image just to be safe with M1 architecture types.
 
-    Once you pushed your repo to ECR, then you should copy the cloud Image URI into the `variables.tf` file in the /terraform repo:
+    Once you pushed your repo to ECR, then you should copy the cloud Image URI:
 
     ![alt text](./images/copy-uri.png)
+
+    And paste it into the `variables.tf` file in the /terraform repo:
 
     ![alt text](./images/replace-uri.png)
 
