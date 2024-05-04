@@ -1,6 +1,6 @@
 # AWS Docker Deployment using Terraform
 
-This repository contains the Terraform configuration files needed to deploy a simpe Go webserver application served by Docker containers on AWS ECS using Fargate.
+This repository contains the Terraform configuration files needed to deploy a docker container for a simple Go webserver to AWS ECS.
 
 ## Overview
 
@@ -9,7 +9,7 @@ The configurations provided here set up the necessary AWS resources to run Docke
 ## Prerequisites
 
 Before you begin, ensure you have the following: 
-- AWS Account and AWS CLI configured with appropriate credentials: [AWS CLI Download Guide](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+- [AWS Account](https://aws.amazon.com/console/) and AWS CLI configured with appropriate credentials: [AWS CLI Download Guide](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 - Terraform installed (version 0.12.x or later recommended): [Terraform Download Guide](https://developer.hashicorp.com/terraform/install)
 - Docker installed if you need to build Docker images or push them to ECR: [Docker Download Link](https://www.docker.com/products/docker-desktop/)
 
@@ -32,10 +32,10 @@ Before you begin, ensure you have the following:
 
 2. **Ensure docker container runs locally**
 
-    It's good practice to test locally before you push code out into the real world, so run these commands to make sure everything works
+    It's good practice to test locally before you push code out into the real world, so run these commands to make sure everything works:
 
-    Run these commands:
-
+    `cd app` to change into the application directory
+    
     `docker build local-testing .` to build your container image
 
     `docker run -p 8000:8000 local-testing` to run the image and expose the correct ports for accessing the application
@@ -44,7 +44,7 @@ Before you begin, ensure you have the following:
 
     If that went smoothly, then you're ready to move on.
 
-3. **Create `terraform.tfvars` file**
+3. **Create `terraform.tfvars` file in /terraform directory**
 
     Once you have your repo up and running in an IDE, you should create this file and enter your aws access key and secret key. If you don't do this, you will have to repeatadely enter your key variables when running terraform commands. Make sure to keep it included in the .gitignore file so you don't expose you access keys!
 
@@ -57,7 +57,7 @@ Before you begin, ensure you have the following:
     
     This is the one creation part I do manually, because pushing your local docker file to ECR cannot be easily automated here.
 
-    To do this, go to ECR in the AWS Console, and click on "Create repo"
+    To do this, go to ECR in the [AWS Console](https://aws.amazon.com/console/), and click on "Create repo"
 
     ## IMPORTANT IF YOU HAVE AN APPLE CHIP Mac
         If you are using an M1 Mac or above, mismatched architecture types can cause some headaches with containers. 
@@ -70,19 +70,28 @@ Before you begin, ensure you have the following:
 
     To push your local docker image to your ECR repo, click on your container repository you just created, and click on the 'view push commands' button:
 
-     ![alt text](image-1.png)
+     ![alt text](./images/push-commands.png)
 
     And run the following commands in your local repo. I added the keyword --platform=linux/amd64 when building the docker image just to be safe with architecture types.
+
+    Once you pushed your repo to ECR, then you should copy the cloud Image URI into the `variables.tf` file in the /terraform repo:
+
+    ![alt text](./images/copy-uri.png)
+
+    ![alt text](./images/replace-uri.png)
+
 
 5. **Running terraform commands**
 
     If you've done the above steps correctly, you should be ready to work some magic with terraform commands.
 
-    First run `terraform init` to initiate your terraform module
+    If you're still in the /app folder, run `cd ..` and `cd terraform` to switch to the terraform folder.
 
-    Then run `terraform plan` to simulate running your terraform code and see if there's any errors
+    Then run `terraform init` to initiate your terraform module.
 
-    If everything looks good, then run `terraform apply` to create your AWS resources
+    Next, run `terraform plan` to simulate running your terraform code and see if there's any errors.
+
+    If everything looks good, then run `terraform apply` to create your AWS resources.
 
 
 6. **Checking your ECS task_definition** 
@@ -93,5 +102,5 @@ Before you begin, ensure you have the following:
 
     2. Click on your cluster, and then you should see that your ECS service and task_definition are running:
 
-![alt text](image.png)
+![alt text](./images/running-task.png)
 
