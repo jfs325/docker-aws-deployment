@@ -15,10 +15,13 @@ Before you begin, ensure you have the following:
 
 ## Repository Structure
 
-- `providers.tf` - lists aws and docker as providers for terraform
-- `main.tf` - creates the ECS cluster, services, and task_definition to run the docker container on AWS
-- `variables.tf` - defines variables for sensitive info like access keys, and non-sensitive info like aws-region, ECR image arn, etc.
-- `vpc.tf` - Configures the VPC, subnets, and other networking resources using terraform vpc module.
+- `/app`: contains index.html and main.go file to create a simple file server, along with dockerfile to run a containerized version of the application.
+
+- `/terraform`: contains the terraform files responsible for configuring and creating AWS resources to deploy the docker server to the cloud.
+    - `providers.tf` - lists aws and docker as providers for terraform
+    - `main.tf` - creates the ECS cluster, services, and task_definition to run the docker container on AWS
+    - `variables.tf` - defines variables for sensitive info like access keys, and non-sensitive info like aws-region, ECR image arn, etc.
+    - `vpc.tf` - Configures the VPC, subnets, and other networking resources using terraform vpc module.
 
 ## Getting Started
 
