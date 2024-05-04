@@ -30,21 +30,36 @@ Before you begin, ensure you have the following:
    git clone https://github.com/jfs325/aws-docker-deploy.git
    cd aws-docker-deploy
 
-2. **Create terraform.tfvars file**
+2. **Ensure docker container runs locally**
 
-    This is where you will enter your aws access key and secret key, to be used by terraform. If you don't create this, you will have to repeatadely enter your key variables when running terraform commands. Make sure to keep it included in the .gitignore file so you don't expose you access keys!
+    It's good practice to test locally before you push code out into the real world, so run these commands to make sure everything works
+
+    Run these commands:
+
+    `docker build local-testing .` to build your container image
+
+    `docker run -p 8000:8000 local-testing` to run the image and expose the correct ports for accessing the application
+
+    `curl http://localhost:8000` to test that you can access the local application, you should recieve some html code back.
+
+    If that went smoothly, then you're ready to move on.
+
+3. **Create `terraform.tfvars` file**
+
+    Once you have your repo up and running in an IDE, you should create this file and enter your aws access key and secret key. If you don't do this, you will have to repeatadely enter your key variables when running terraform commands. Make sure to keep it included in the .gitignore file so you don't expose you access keys!
 
     Mine looks something like this:
 
     aws_access_key = "enter-access-key-here"
     aws_secret_key = "enter-secret-key-here"
 
-3. **Create an ECR docker repo in AWS console**
-    This is the one part I do manually, because pushing your local docker file to ECR cannot be easily automated here.
+4. **Create an ECR docker repo in AWS console**
+    
+    This is the one creation part I do manually, because pushing your local docker file to ECR cannot be easily automated here.
 
     To do this, go to ECR in the AWS Console, and click on "Create repo"
 
-    # IMPORTANT IF YOU HAVE AN APPLE CHIP Mac
+    ## IMPORTANT IF YOU HAVE AN APPLE CHIP Mac
         If you are using an M1 Mac or above, mismatched architecture types can cause some headaches with containers. 
         
         The default architecture docker will run is ARM64 on your local machine, which is different than the default AMD64 for ECS services.
@@ -53,15 +68,15 @@ Before you begin, ensure you have the following:
     
     Name your repo, and create it.
 
-    To push your local docker image to your ECR repo, click on the 'view push commands' button:
+    To push your local docker image to your ECR repo, click on your container repository you just created, and click on the 'view push commands' button:
 
      ![alt text](image-1.png)
 
-    And run the following commands in your local repo. I added the keyword --platform=linux/amd64 when building the docker image just to be safe.
+    And run the following commands in your local repo. I added the keyword --platform=linux/amd64 when building the docker image just to be safe with architecture types.
 
-4. **Running terraform commands**
+5. **Running terraform commands**
 
-    If you've done the above steps correctly, you should be ready to run some terraform commands to work some magic.
+    If you've done the above steps correctly, you should be ready to work some magic with terraform commands.
 
     First run `terraform init` to initiate your terraform module
 
@@ -70,7 +85,8 @@ Before you begin, ensure you have the following:
     If everything looks good, then run `terraform apply` to create your AWS resources
 
 
-5. **Checking your ECS task_definition** 
+6. **Checking your ECS task_definition** 
+    
     If your `terraform apply` ran smoothly, then you're ready to check out your container in the cloud!
 
     1. Go to ECS in the AWS Console
