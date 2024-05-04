@@ -74,17 +74,17 @@ Before you begin, ensure you have the following:
 
     To push your local docker image to your ECR repo, click on your container repository you just created, and click on the 'view push commands' button:
 
-     ![alt text](./images/push-commands.png)
+     ![alt text](./pictures/push-commands.png)
 
     And run the following commands in your local repo. I added the keyword --platform=linux/amd64 when building the docker image just to be safe with M1 architecture types.
 
     Once you pushed your repo to ECR, then you should copy the cloud Image URI:
 
-    ![alt text](./images/copy-uri.png)
+    ![alt text](./pictures/copy-uri.png)
 
     And paste it into the `variables.tf` file in the /terraform repo:
 
-    ![alt text](./images/replace-uri.png)
+    ![alt text](./pictures/replace-uri.png)
 
 
 5. **Running terraform commands**
@@ -108,5 +108,5 @@ Before you begin, ensure you have the following:
 
     2. Click on your cluster, and then you should see that your ECS service and task_definition are running:
 
-![alt text](./images/running-task.png)
+![alt text](./pictures/running-task.png)
 
