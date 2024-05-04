@@ -1,4 +1,4 @@
-# AWS Docker Deployment using Terraform
+# AWS Docker Deployment Using Terraform
 
 This repository contains the Terraform configuration files needed to deploy a docker container for a simple Go webserver to AWS ECS.
 
@@ -37,38 +37,46 @@ Before you begin, ensure you have the following:
 
     It's good practice to test locally before you push code out into the real world, so run these commands to make sure everything works:
 
-    `cd app` to change into the application directory
+        cd app 
+    to change into the application directory
     
-    `docker build local-testing .` to build your container image
+        docker build local-testing . 
+    to build your container image
 
-    `docker run -p 8000:8000 local-testing` to run the image and expose the correct ports for accessing the application
-
-    `curl http://localhost:8000` to test that you can access the local application, you should recieve some html code back.
+        docker run -p 8000:8000 local-testing 
+    to run the image and expose the correct ports for accessing the application
+    
+        curl http://localhost:8000
+    to test access to local application, you should recieve some html code back
 
     If that went smoothly, then you're ready to move on.
 
 3. **Create `terraform.tfvars` file in /terraform directory**
 
-    Once you have your repo up and running in an IDE, you should create this file and enter your aws access key and secret key. If you don't do this, you will have to repeatadely enter your key variables when running terraform commands. Make sure to keep it included in the .gitignore file so you don't expose you access keys!
+    Once you have your repo up and running in an IDE, you should create this file in the `/terraform` folder and enter your aws access and secret key. If you don't do this, you will have to repeatadely enter your key variables when running terraform commands. Make sure to keep it included in the .gitignore file so you don't expose you access keys!
 
-    Mine looks something like this:
+    Follow this format:
 
-    `aws_access_key = "enter-access-key-here"`
+        aws_access_key = "enter-access-key-here"
+        aws_secret_key = "enter-secret-key-here"
 
-    `aws_secret_key = "enter-secret-key-here"`
-
-4. **Create an ECR docker repository in AWS console**
+4. **Create an ECS container repo and push your docker image to it**
     
     This is the one creation part I do manually, because pushing your local docker image to ECR cannot be easily automated here.
 
     To do this, go to ECR in the [AWS Console](https://aws.amazon.com/console/), and click on "Create repo"
 
-    ## IMPORTANT IF YOU HAVE AN APPLE CHIP Mac
-        If you are using an M1 Mac or above, mismatched architecture types can cause some headaches with containers. 
+    ## IMPORTANT IF YOU HAVE AN APPLE CHIP MAC
         
-        The default architecture docker will run is ARM64 on your local machine, which is different than the default AMD64 for ECS services.
+    If you are using an M1 Mac or above, mismatched architecture types can cause some headaches with containers. 
+    
+    The default architecture docker will run is ARM64 on your local machine, which is different than the default AMD64 for ECS services.
 
-        If you want to change the docker file for your own purposes, make sure to included `FROM --platform=linux/amd64` in your dockerfile when defining architecture types. I believe this is easier than configuring multiple AWS resources to run ARM64 for your default local architecture. 
+    If you want to change the docker file for your own purposes, make sure to include
+        
+        FROM --platform=linux/amd64 
+    
+    in your dockerfile when defining architecture types. I believe this is easier than configuring multiple AWS resources to run ARM64 for your default local architecture. 
     
     Name your repo, and create it.
 
@@ -76,7 +84,7 @@ Before you begin, ensure you have the following:
 
      ![alt text](./pictures/push-commands.png)
 
-    And run the following commands in your local repo. I added the keyword --platform=linux/amd64 when building the docker image just to be safe with M1 architecture types.
+    And run the following commands in your local repo. I added the keyword `--platform=linux/amd64` when building the docker image just to be safe with M1 architecture types.
 
     Once you pushed your repo to ECR, then you should copy the cloud Image URI:
 
@@ -91,14 +99,28 @@ Before you begin, ensure you have the following:
 
     If you've done the above steps correctly, you should be ready to work some magic with terraform commands.
 
-    If you're still in the /app folder, run `cd ..` and `cd terraform` to switch to the terraform folder.
+    If you're still in the /app folder, run this to switch to the terraform folder:
+    
+        cd ..  
+        cd terraform
 
-    Then run `terraform init` to initiate your terraform module.
+    Then run 
+    
+        terraform init 
+    to initiate your terraform module
 
-    Next, run `terraform plan` to simulate running your terraform code and see if there's any errors.
+    
+    
+    Next, run 
+        
+        terraform plan 
+    to preview your terraform code and see if there's any errors
+        
 
-    If everything looks good, then run `terraform apply` to create your AWS resources.
-
+    If everything looks good, then run 
+    
+        terraform apply
+    to create your AWS resources
 
 6. **Checking your ECS task_definition** 
     
