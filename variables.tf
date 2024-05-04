@@ -21,3 +21,9 @@ variable "vpc_cidr" {
   type        = string
   default     = "10.0.0.0/16"
 }
+
+variable "ecr_task_container_image_arn" {
+  description = "arn for ecr image"
+  type = string
+  default = "public.ecr.aws/o2u9j5x1/service-deploy:latest"
+}

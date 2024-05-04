@@ -1,11 +1,5 @@
 resource "aws_ecs_cluster" "cluster" {
-  name = "week20_ecs_cluster"
-
-#   capacity_providers = ["FARGATE_SPOT", "FARGATE"]
-
-#   default_capacity_provider_strategy {
-#     capacity_provider = "FARGATE_SPOT"
-#   }
+  name = "aws-docker-deployment"
 
   setting {
     name  = "containerInsights"
@@ -35,7 +29,7 @@ module "ecs-fargate" {
 
   cluster_id = aws_ecs_cluster.cluster.id
 
-  task_container_image   = "public.ecr.aws/o2u9j5x1/service-deploy:latest"
+  task_container_image   = var.ecr_task_container_image_arn
   task_definition_cpu    = 256
   task_definition_memory = 512
 
